@@ -8,6 +8,10 @@ const checklistSchema = new Schema({
   },
 });
 
+const tagSchema = new Schema({
+  name: String
+});
+
 const noteSchema = new Schema(
   {
     title: {
@@ -18,12 +22,8 @@ const noteSchema = new Schema(
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-      enum: ["Personal Note", "Task", "Birthday", "Idea"],
-      required: true,
-    },
     checklist: [checklistSchema],
+    tags: [tagSchema],
     image: {
       cloudinaryId: String,
       imageUrl: String,
