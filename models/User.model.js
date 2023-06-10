@@ -5,6 +5,10 @@ const userSchema = new Schema(
     username: {
       type: String,
       required: true,
+      match: [
+        /^[A-Za-z0-9\s]+$/,
+        "Username can contains only letters (A-Z a-z) digits (0-9) and spaces.",
+      ],
       unique: true,
       trim: true,
       minlength: [4, "Username must have min 4 characters"],
