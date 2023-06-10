@@ -1,9 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-/* GET home page */
+//GET home page
 router.get("/", (req, res, next) => {
-  res.render("index");
+  const userDetails = req.session.currentUser;
+  if (userDetails) {
+    res.render("index", { userDetails });    
+  } else {
+    res.render("index");
+  }
 });
 
 module.exports = router;
