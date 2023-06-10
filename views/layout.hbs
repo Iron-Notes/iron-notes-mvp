@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css" />
+  <script src="https://kit.fontawesome.com/a0b304df1a.js" crossorigin="anonymous"></script>
   <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
@@ -25,19 +26,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav mx-auto">
-            <a class="nav-link active" aria-current="page" href="#">Add a Note</a>
-            <a class="nav-link" href="/notes/list">My Notes</a>
+            <a class="nav-link {{#if userDetails}}active{{else}}disabled
+        {{/if}} 
+        " aria-current="page" href="/notes/list">My Notes</a>
             <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-bs-toggle='dropdown' href="#" role="button" aria-haspopup="true"
-                aria-expanded="false">Labels</a>
+              <a class="nav-link dropdown-toggle {{#unless userDetails}}disabled{{/unless}}" data-bs-toggle='dropdown'
+                href="#" role="button" aria-haspopup="true" aria-expanded="false">Labels</a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Label1</a>
                 <a class="dropdown-item" href="#">Label2</a>
                 <a class="dropdown-item" href="#">Label3</a>
               </div>
             </div>
-            <a class="nav-link" href="#">Archive</a>
-            <a class="nav-link" href="#">Trash</a>
+            <a class="nav-link {{#unless userDetails}}disabled{{/unless}}" href="#">Archive</a>
+            <a class="nav-link {{#unless userDetails}}disabled{{/unless}}" href="#">Trash</a>
             <a class="nav-link" href="
             {{#if userDetails}}
             /auth/logout
@@ -53,7 +55,7 @@
           </div>
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-primary" type="submit">Search</button>
           </form>
         </div>
       </div>
