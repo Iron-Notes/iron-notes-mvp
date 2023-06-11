@@ -141,7 +141,7 @@ router.get("/auth/logout", (req, res, next) => {
 });
 
 //GET /auth/user-profile
-router.get("/auth/user-profile", (req, res, next) => {
+router.get("/auth/user-profile", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   if (userDetails) {
     res.render("auth/user-profile", { userDetails });

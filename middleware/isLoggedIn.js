@@ -4,9 +4,8 @@ function isLoggedIn(req, res, next){
       next();
   } else {
       // user not logged in
-      res.redirect("/login");
+      res.redirect("/auth/login");
   }
 }
-
 
 module.exports = isLoggedIn;
