@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
-
-const Note = require('../models/Note.model');
+const Note = require("../models/Note.model");
 
 // READ notes with status "active", also providing userDetails and notes (of the current user)
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
@@ -34,21 +33,15 @@ router.get("/notes/create", isLoggedIn, (req, res, next) => {
 
 // CREATE new note > post into DB ensuring that optional fields that are empty are not to store with value 'undefined'
 router.post("/notes/create", isLoggedIn, (req, res, next) => {
-  const {
-    title,
-    description,
-    checklist,
-    label,
-    backgroundColor,
-    image
-  } = req.body;
+  const { title, description, checklist, label, backgroundColor, image } =
+    req.body;
 
   const userId = req.session.currentUser._id;
 
   const newNote = {
     title,
     description,
-    user: userId
+    user: userId,
   };
 
   if (checklist) {
@@ -92,7 +85,7 @@ router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
 
   Note.findById(noteId)
     .then((note) => {
-      res.render('notes/note-details', { note });
+      res.render("notes/note-details", { note });
     })
     .catch((error) => next(error));
 });
@@ -100,13 +93,21 @@ router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
 // UPDATE note and see details > process update ensuring empty optional fields not stored as 'undefined'
 router.post('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
-  const { title, description, status, checklist, label, backgroundColor, image } = req.body;
+  const {
+    title,
+    description,
+    status,
+    checklist,
+    label,
+    backgroundColor,
+    image,
+  } = req.body;
 
   const updateFields = {
     title,
     description,
     status,
-    backgroundColor
+    backgroundColor,
   };
 
   if (checklist) {
@@ -121,11 +122,9 @@ router.post('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
     updateFields.image = image;
   }
 
-  Note.findByIdAndUpdate(noteId, updateFields, {new: true})
-    .then(() => res.redirect('/notes/list'))
+  Note.findByIdAndUpdate(noteId, updateFields, { new: true })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
-
-
 
 module.exports = router;
