@@ -71,4 +71,46 @@ router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
       .catch(error => next(error));
 });
 
+// UPDATE note and see details / render view
+router.get('/notes/:noteId', isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+
+  Note.findById(noteId)
+    .then((note) => {
+      res.render('notes/note-details', { note });
+    })
+    .catch((error) => next(error));
+});
+
+// UPDATE note and see details / process update
+router.post('/notes/:noteId', isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+  const { title, description, status, checklist, label, backgroundColor, image } = req.body;
+
+  const updateFields = {
+    title,
+    description,
+    status,
+    backgroundColor
+  };
+
+  if (checklist) {
+    updateFields.checklist = checklist;
+  }
+
+  if (label) {
+    updateFields.label = label;
+  }
+
+  if (image) {
+    updateFields.image = image;
+  }
+
+  Note.findByIdAndUpdate(noteId, updateFields, {new: true})
+    .then(() => res.redirect('/notes/list'))
+    .catch((error) => next(error));
+});
+
+
+
 module.exports = router;
