@@ -8,7 +8,7 @@ router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
 
-  Note.find({ user: userId, status: 'active' })
+  Note.find({ user: userId, status: "active" })
     .then((notes) => {
       res.render("notes/note-list", { userDetails, notes });
     })
@@ -16,12 +16,13 @@ router.get("/notes/list", isLoggedIn, (req, res, next) => {
 });
 
 // READ notes with status "deleted" in a view called "trash"
-router.get('/notes/trash', isLoggedIn, (req, res, next) => {
+router.get("/notes/trash", isLoggedIn, (req, res, next) => {
+  const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
-
-  Note.find({ user: userId, status: 'deleted' })
+  Note.find({ user: userId, status: "deleted" })
     .then((deletedNotes) => {
-      res.render('notes/trash', { deletedNotes });
+      const userDetails = req.session.currentUser;
+      res.render("notes/note-trash", { deletedNotes, userDetails });
     })
     .catch((error) => next(error));
 });
@@ -70,35 +71,35 @@ router.post("/notes/create", isLoggedIn, (req, res, next) => {
     });
 });
 
-// SOFT-DELETE note from database by updating status to "deleted" 
-router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
+// SOFT-DELETE note from database by updating status to "deleted"
+router.post("/notes/:noteId/delete", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
-  Note.findByIdAndUpdate(noteId, { status: 'deleted' })
-    .then(() => res.redirect('/notes/list'))
+  Note.findByIdAndUpdate(noteId, { status: "deleted" })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
 
 // RESTORE deleted note from "trash" by setting it "active"
-router.post('/notes/:noteId/restore', isLoggedIn, (req, res, next) => {
+router.post("/notes/:noteId/restore", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
-  Note.findByIdAndUpdate(noteId, { status: 'active' })
-    .then(() => res.redirect('/notes/list'))
+  Note.findByIdAndUpdate(noteId, { status: "active" })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
 
 // HARD-DELETE notes with status "deleted" > via "empty trash" button
-router.post('/notes/emptyTrash', isLoggedIn, (req, res, next) => {
+router.post("/notes/emptyTrash", isLoggedIn, (req, res, next) => {
   const userId = req.session.currentUser._id;
 
-  Note.deleteMany({ user: userId, status: 'deleted' })
-    .then(() => res.redirect('/notes/list'))
+  Note.deleteMany({ user: userId, status: "deleted" })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
 
 // UPDATE note and see details > render view with current values
-router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
+router.get("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findById(noteId)
@@ -109,7 +110,7 @@ router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
 });
 
 // UPDATE note and see details > process update ensuring empty optional fields not stored as 'undefined'
-router.post('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
+router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
   const {
     title,

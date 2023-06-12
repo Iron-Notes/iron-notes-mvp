@@ -111,7 +111,7 @@ router.post("/auth/login", (req, res, next) => {
       } else if (bcryptjs.compareSync(password, user.passwordHash)) {
         //login successful
         req.session.currentUser = user;
-        res.render("notes/note-list", { userDetails: user });
+        res.redirect("/notes/list");
       } else {
         //login failed
         res
