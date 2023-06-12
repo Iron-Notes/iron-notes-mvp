@@ -4,24 +4,18 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 
 const Note = require('../models/Note.model');
 
-// GET /notes/list
+// GET /notes/list and render userDetails and notes from the current user
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
-  if (userDetails) {
-    res.render("notes/note-list", { userDetails });
-  }
-});
-
-// GET notes/list for the logged in user
-router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userId = req.session.currentUser._id;
 
   Note.find({ user: userId })
     .then((notes) => {
-      res.render("notes/note-list", { notes });
+      res.render("notes/note-list", { userDetails, notes });
     })
     .catch((error) => next(error));
 });
+
 
 // CREATE new note / display form
 router.get("/notes/create", isLoggedIn, (req, res, next) => {
