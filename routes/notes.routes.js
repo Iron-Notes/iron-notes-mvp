@@ -88,6 +88,15 @@ router.post('/notes/:noteId/restore', isLoggedIn, (req, res, next) => {
     .catch((error) => next(error));
 });
 
+// HARD-DELETE notes with status "deleted" > via "empty trash" button
+router.post('/notes/emptyTrash', isLoggedIn, (req, res, next) => {
+  const userId = req.session.currentUser._id;
+
+  Note.deleteMany({ user: userId, status: 'deleted' })
+    .then(() => res.redirect('/notes/list'))
+    .catch((error) => next(error));
+});
+
 // UPDATE note and see details > render view with current values
 router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
