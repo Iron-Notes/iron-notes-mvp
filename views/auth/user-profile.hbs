@@ -1,1 +1,49 @@
-<h1>user profile {{userDetails.username}}</h1>
+<h1>Profile</h1>
+<div class="container">
+    <div class="row d-flex jsutify-content-center">
+        <div class="col-md-10 mt-5 pt-5">
+            <div class="row z-depth-3">
+                <div class="col-sm-4 bg-info rounded-left">
+                    <div class="card-block text-center text-white">
+                        <i class="fas fa-user-tie fa-7x mt-5">
+                            <h2 class="font-weight-bold mt-4">Hello {{userDetails.username}}!</h2>
+                            <i class="far fa-edit fa-2x mb-4"></i>
+                        </i>
+                    </div>
+                </div>
+                <div class="col-sm-8 bg-white rounded-right">
+                    <h3 class="mt-3 text-center">Information</h3>
+                    <hr class="badge-primary mt-0 w-25">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="font-weight-bold">Email: <a href="" class="fa-regular fa-pen-to-square"></a></p>
+                            <h6 class="text-muted">{{userDetails.email}}</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="font-weight-bold">Password: <a href="" class="fa-regular fa-pen-to-square"></a></p>
+                            <h6 class="text-muted">**********</h6>
+                        </div>
+                    </div>                 
+                    <div class="row pt-3">
+                        <div class="col-sm-6">
+                             <p class="font-weight-bold">Username: <a href="" class="fa-regular fa-pen-to-square"></a></p>
+                            <h6 class="text-muted">{{userDetails.username}}</h6>
+                        </div>
+                    </div>
+                    {{!-- <h4 class="mt-3">Projects</h4>
+                    <hr class="bg-primary">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="font-weight-bold">Recent</p>
+                            <h6 class="text-muted">School Web</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="font-weight-bold">Most viewed:</p>
+                            <h6 class="text-muted">Dinoter</h6>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
