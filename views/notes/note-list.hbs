@@ -15,7 +15,7 @@
                 <a href="/notes/trash" class="btn btn-outline-danger fa-regular fa-trash-can m-1"></a>
             </div>
             <div class="card-body">
-                <h5 id="edit-card-title" class="card-title">{{this.title}}</h5>
+                <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
                 <hr>
                 <p id="edit-card-note" class="card-text">{{this.description}}</p>
             </div>
@@ -45,7 +45,7 @@
     </div>
 </form>
 
-<form method="post" action="/notes/{{this._id}}/edit">
+<form id="edit-modal-form" method="post" action="">
     <div class="modal fade" id="modal-edit">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
             <div class="modal-content">
@@ -54,7 +54,7 @@
                     <button class="btn-close" data-bs-dismiss="modal" data-bs-target="#modal-edit"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea id="edit-modal-note" class="modal-textarea" name="note" rows="10"
+                    <textarea id="edit-modal-note" class="modal-textarea" name="description" rows="10"
                         placeholder="Note"></textarea>
                 </div>
                 <div class="modal-footer">
@@ -75,15 +75,17 @@
         var editCardNoteList = document.querySelectorAll("#edit-card-note");
         var editModalTitle = document.getElementById("edit-modal-title");
         var editModalNote = document.getElementById("edit-modal-note");
-
+        var modalForm = document.getElementById('edit-modal-form')
         // Add click event listener to each button
         btnEditList.forEach(function (btnEdit, index) {
             btnEdit.addEventListener("click", function () {
                 // Get the corresponding card title and note and copy it to the modals
                 var cardTitle = editCardTitleList[index].innerText;
                 var cardNote = editCardNoteList[index].innerText;
+                var cardId = editCardTitleList[index].getAttribute('data-id')
                 editModalTitle.value = cardTitle;
                 editModalNote.value = cardNote;
+                modalForm.setAttribute('action', `/notes/${cardId}/edit`)
             });
         });
     });
