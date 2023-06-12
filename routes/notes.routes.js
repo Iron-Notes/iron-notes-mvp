@@ -62,5 +62,13 @@ router.post("/notes/create", isLoggedIn, (req, res, next) => {
     });
 });
 
+// DELETE note from database
+router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+
+  Note.findByIdAndDelete(noteId)
+      .then(() => res.redirect('/notes/list'))
+      .catch(error => next(error));
+});
 
 module.exports = router;
