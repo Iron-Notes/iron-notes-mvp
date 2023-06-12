@@ -79,6 +79,15 @@ router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
     .catch((error) => next(error));
 });
 
+// RESTORE deleted note from "trash" by setting it "active"
+router.post('/notes/:noteId/restore', isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+
+  Note.findByIdAndUpdate(noteId, { status: 'active' })
+    .then(() => res.redirect('/notes/list'))
+    .catch((error) => next(error));
+});
+
 // UPDATE note and see details > render view with current values
 router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
