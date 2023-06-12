@@ -18,7 +18,7 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="/">IronNotes</a>
         {{#if userDetails}}
-        <p class="m-2">Welcome {{userDetails.username}}!</p>
+        <p class="m-2"><a class="nav-link {{#unless userDetails}}disabled{{/unless}}" href="/auth/user-profile">Welcome {{userDetails.username}}!</a></p>
         {{/if}}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
