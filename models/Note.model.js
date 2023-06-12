@@ -8,7 +8,7 @@ const checklistSchema = new Schema({
   },
 });
 
-const tagSchema = new Schema({
+const labelSchema = new Schema({
   name: String
 });
 
@@ -23,7 +23,7 @@ const noteSchema = new Schema(
       required: true,
     },
     checklist: [checklistSchema],
-    tags: [tagSchema],
+    label: [labelSchema],
     image: {
       cloudinaryId: String,
       imageUrl: String,
@@ -48,4 +48,6 @@ const noteSchema = new Schema(
   }
 );
 
+module.exports = model("Checklist", checklistSchema);
+module.exports = model("Label", labelSchema);
 module.exports = model("Note", noteSchema);
