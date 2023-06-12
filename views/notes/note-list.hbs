@@ -1,55 +1,90 @@
 <link rel="stylesheet" href="/stylesheets/modal.css">
-<a href="/notes/create" class="btn btn-outline-primary m-2">
+
+<a href="/notes/create" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#modal-create">
     <h3 class="d-flex fa-regular fa-note-sticky">
         <p>Add Note</p>
     </h3>
 </a>
 <div class="row">
+    {{#each notes}}
     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
-        <div class="card" style="max-height: 20vh; overflow-y: scroll">
+        <div class="card" style="max-height: 20vh; overflow-y: auto">
             <div class="d-flex justify-content-end">
-                <a href="/notes/edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
-                    data-bs-toggle="modal" data-bs-target="#modal"></a>
+                <button id="btn-edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
+                    data-bs-toggle="modal" data-bs-target="#modal-edit"></button>
                 <a href="/notes/trash" class="btn btn-outline-danger fa-regular fa-trash-can m-1"></a>
-
             </div>
             <div class="card-body">
-
-                <h5 class="card-title">Special title treatment</h5>
+                <h5 id="edit-card-title" class="card-title">{{this.title}}</h5>
                 <hr>
-
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic vel error et rerum
-                    excepturi expedita aliquam suscipit magni, tenetur, repudiandae voluptatibus unde consequuntur ad
-                    consequatur? Reprehenderit inventore molestiae est eligendi nulla nihil doloremque! Suscipit rerum
-                    pariatur nihil rem ab facere animi alias, officiis earum hic, repudiandae ullam. Labore odit harum,
-                    saepe accusamus ullam incidunt iure ut pariatur nulla cumque consequatur? Odio ex in facilis rem
-                    sint, aliquam dolor omnis officia? Modi vitae, porro cum ullam reprehenderit optio totam temporibus
-                    iure incidunt mollitia quo eius nam. Debitis sequi magni voluptatum quasi mollitia rerum ut
-                    recusandae officia quos? Dicta distinctio minus provident adipisci nobis aliquid non excepturi,
-                    blanditiis corporis totam hic quod sunt! Possimus quia voluptatem dolore, cumque blanditiis
-                    molestiae illo culpa id sed molestias nobis earum vero natus ut tempora, vitae eaque magni. Maxime
-                    optio iure rerum expedita omnis a autem commodi fuga nisi vero libero, ea aspernatur perspiciatis
-                    repudiandae laborum sapiente delectus provident voluptates assumenda reprehenderit! Libero placeat
-                    temporibus vitae! Sed aut odit voluptates, velit excepturi quo quae pariatur ipsum vel delectus eos
-                    numquam reiciendis adipisci aliquid! In qui voluptatem ad, et sapiente iusto itaque unde provident
-                    tenetur, maxime vel. Fuga quisquam enim inventore modi ducimus sint minima asperiores voluptates!
-                </p>
-
+                <p id="edit-card-note" class="card-text">{{this.description}}</p>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    {{/each}}
+</div>
+
+<form method="post" action="/notes/create">
+    <div class="modal fade" id="modal-create">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Title</h2>
-                    <button class="btn-close" data-bs-dismiss="modal" data-bs-target="#modal"></button>
+                    <input class="modal-input" type="text" name="title" placeholder="Title"></input>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        data-bs-target="#modal-create"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea name="" rows="10"
-                        id="">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus impedit veniam facere harum dolore quae eius tempora animi, voluptatem aperiam voluptas at accusamus doloribus maiores, provident, excepturi ipsum. Corporis nobis laborum cupiditate accusantium beatae illum quos soluta odio modi expedita neque, provident unde! Ullam facere quaerat nemo enim ad atque ipsam praesentium eos, repellat sequi reiciendis placeat sapiente laudantium mollitia perspiciatis consectetur beatae autem obcaecati quisquam? Tempore obcaecati veniam debitis, cum facere consequatur veritatis qui molestias corrupti temporibus officia aspernatur, harum laborum ullam! Enim hic quidem, aliquid laborum officia odio, accusantium assumenda mollitia alias et porro veritatis dolorem numquam illum iusto est tempore rerum illo blanditiis omnis? Veniam sapiente commodi perspiciatis dolor culpa facere, sed tenetur! Saepe, odit nobis aut modi unde quasi reprehenderit dignissimos dolore magnam corrupti quaerat? Est alias culpa quasi nulla iste nesciunt, corporis illo nisi itaque soluta possimus facilis suscipit rerum ab aperiam dignissimos velit assumenda labore aliquam voluptatibus recusandae? Eligendi et, molestiae autem non veritatis tempora perspiciatis praesentium alias repellat necessitatibus eaque earum quod, corrupti ducimus consequuntur quo exercitationem voluptate fugiat, ipsa recusandae voluptatum minus dolorum? Explicabo quod cumque repellat odio velit eos adipisci eligendi repellendus, ducimus labore totam molestiae rem quam laboriosam laborum nihil.</textarea>
+                    <textarea class="modal-textarea" name="description" rows="10" placeholder="Note"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit"
+                        class="btn btn-outline-success fa-regular fa-pen-to-square m-1 fa-regular fa-floppy-disk"></button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
+
+<form method="post" action="/notes/{{this._id}}/edit">
+    <div class="modal fade" id="modal-edit">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input id="edit-modal-title" class="modal-input" type="text" name="title" placeholder="Title">
+                    <button class="btn-close" data-bs-dismiss="modal" data-bs-target="#modal-edit"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="edit-modal-note" class="modal-textarea" name="note" rows="10"
+                        placeholder="Note"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit"
+                        class="btn btn-outline-success fa-regular fa-pen-to-square m-1 fa-regular fa-floppy-disk"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all the necessary elements
+        var btnEditList = document.querySelectorAll("#btn-edit");
+        var editCardTitleList = document.querySelectorAll("#edit-card-title");
+        var editCardNoteList = document.querySelectorAll("#edit-card-note");
+        var editModalTitle = document.getElementById("edit-modal-title");
+        var editModalNote = document.getElementById("edit-modal-note");
+
+        // Add click event listener to each button
+        btnEditList.forEach(function (btnEdit, index) {
+            btnEdit.addEventListener("click", function () {
+                // Get the corresponding card title and note and copy it to the modals
+                var cardTitle = editCardTitleList[index].innerText;
+                var cardNote = editCardNoteList[index].innerText;
+                editModalTitle.value = cardTitle;
+                editModalNote.value = cardNote;
+            });
+        });
+    });
+</script>

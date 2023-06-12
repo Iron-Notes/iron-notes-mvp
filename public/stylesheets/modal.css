@@ -1,8 +1,12 @@
-textarea {
+.modal-textarea,
+.modal-input {
   height: 100%;
   width: 100%;
   border: none;
   background-color: transparent;
   resize: none;
   outline: none;
+}
+.modal-input{
+  font-size: large;
 }
