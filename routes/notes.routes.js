@@ -4,25 +4,35 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 
 const Note = require('../models/Note.model');
 
-// GET /notes/list and render userDetails and notes from the current user
+// READ notes with status "active", also providing userDetails and notes (of the current user)
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
 
-  Note.find({ user: userId })
+  Note.find({ user: userId, status: 'active' })
     .then((notes) => {
       res.render("notes/note-list", { userDetails, notes });
     })
     .catch((error) => next(error));
 });
 
+// READ notes with status "deleted" in a view called "trash"
+router.get('/notes/trash', isLoggedIn, (req, res, next) => {
+  const userId = req.session.currentUser._id;
 
-// CREATE new note / display form
+  Note.find({ user: userId, status: 'deleted' })
+    .then((deletedNotes) => {
+      res.render('notes/trash', { deletedNotes });
+    })
+    .catch((error) => next(error));
+});
+
+// CREATE new note > display form
 router.get("/notes/create", isLoggedIn, (req, res, next) => {
   res.render("notes/note-create");
 });
 
-// CREATE new note / process form
+// CREATE new note > post into DB ensuring that optional fields that are empty are not to store with value 'undefined'
 router.post("/notes/create", isLoggedIn, (req, res, next) => {
   const {
     title,
@@ -67,16 +77,16 @@ router.post("/notes/create", isLoggedIn, (req, res, next) => {
     });
 });
 
-// DELETE note from database
+// SOFT-DELETE note from database by updating status to "deleted" 
 router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
-  Note.findByIdAndDelete(noteId)
-      .then(() => res.redirect('/notes/list'))
-      .catch(error => next(error));
+  Note.findByIdAndUpdate(noteId, { status: 'deleted' })
+    .then(() => res.redirect('/notes/list'))
+    .catch((error) => next(error));
 });
 
-// UPDATE note and see details / render view
+// UPDATE note and see details > render view with current values
 router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
@@ -87,7 +97,7 @@ router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
     .catch((error) => next(error));
 });
 
-// UPDATE note and see details / process update
+// UPDATE note and see details > process update ensuring empty optional fields not stored as 'undefined'
 router.post('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
   const { title, description, status, checklist, label, backgroundColor, image } = req.body;

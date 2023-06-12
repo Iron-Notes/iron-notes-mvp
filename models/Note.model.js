@@ -35,7 +35,7 @@ const noteSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["active", "archived"],
+      enum: ["active", "archived", "deleted"],
       default: "active",
     },
     user: {
