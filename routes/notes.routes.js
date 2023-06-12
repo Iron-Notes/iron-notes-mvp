@@ -4,12 +4,15 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 
 const Note = require('../models/Note.model');
 
-// GET /notes/list
+// GET notes/list displaying all notes for the current user ID
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
-  const userDetails = req.session.currentUser;
-  if (userDetails) {
-    res.render("notes/note-list", { userDetails });
-  }
+  const userId = req.session.currentUser._id;
+
+  Note.find({ user: userId })
+    .then((notes) => {
+      res.render("notes/note-list", { notes });
+    })
+    .catch((error) => next(error));
 });
 
 // CREATE new note / display form
@@ -72,7 +75,7 @@ router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
 });
 
 // UPDATE note and see details / render view
-router.get('/notes/:noteId', isLoggedIn, (req, res, next) => {
+router.get('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findById(noteId)
@@ -83,7 +86,7 @@ router.get('/notes/:noteId', isLoggedIn, (req, res, next) => {
 });
 
 // UPDATE note and see details / process update
-router.post('/notes/:noteId', isLoggedIn, (req, res, next) => {
+router.post('/notes/:noteId/edit', isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
   const { title, description, status, checklist, label, backgroundColor, image } = req.body;
 
