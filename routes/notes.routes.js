@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
-
-const Note = require('../models/Note.model');
+const Note = require("../models/Note.model");
 
 // GET /notes/list
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
@@ -19,21 +18,15 @@ router.get("/notes/create", isLoggedIn, (req, res, next) => {
 
 // CREATE new note / process form
 router.post("/notes/create", isLoggedIn, (req, res, next) => {
-  const {
-    title,
-    description,
-    checklist,
-    label,
-    backgroundColor,
-    image
-  } = req.body;
+  const { title, description, checklist, label, backgroundColor, image } =
+    req.body;
 
   const userId = req.session.currentUser._id;
 
   const newNote = {
     title,
     description,
-    user: userId
+    user: userId,
   };
 
   if (checklist) {
@@ -63,35 +56,43 @@ router.post("/notes/create", isLoggedIn, (req, res, next) => {
 });
 
 // DELETE note from database
-router.post('/notes/:noteId/delete', isLoggedIn, (req, res, next) => {
+router.post("/notes/:noteId/delete", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findByIdAndDelete(noteId)
-      .then(() => res.redirect('/notes/list'))
-      .catch(error => next(error));
+    .then(() => res.redirect("/notes/list"))
+    .catch((error) => next(error));
 });
 
 // UPDATE note and see details / render view
-router.get('/notes/:noteId', isLoggedIn, (req, res, next) => {
+router.get("/notes/:noteId", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findById(noteId)
     .then((note) => {
-      res.render('notes/note-details', { note });
+      res.render("notes/note-details", { note });
     })
     .catch((error) => next(error));
 });
 
 // UPDATE note and see details / process update
-router.post('/notes/:noteId', isLoggedIn, (req, res, next) => {
+router.post("/notes/:noteId", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
-  const { title, description, status, checklist, label, backgroundColor, image } = req.body;
+  const {
+    title,
+    description,
+    status,
+    checklist,
+    label,
+    backgroundColor,
+    image,
+  } = req.body;
 
   const updateFields = {
     title,
     description,
     status,
-    backgroundColor
+    backgroundColor,
   };
 
   if (checklist) {
@@ -106,11 +107,9 @@ router.post('/notes/:noteId', isLoggedIn, (req, res, next) => {
     updateFields.image = image;
   }
 
-  Note.findByIdAndUpdate(noteId, updateFields, {new: true})
-    .then(() => res.redirect('/notes/list'))
+  Note.findByIdAndUpdate(noteId, updateFields, { new: true })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
-
-
 
 module.exports = router;
