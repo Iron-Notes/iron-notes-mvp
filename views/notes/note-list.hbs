@@ -73,24 +73,76 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Get all the necessary elements
-        var btnEditList = document.querySelectorAll("#btn-edit");
-        var editCardTitleList = document.querySelectorAll("#edit-card-title");
-        var editCardNoteList = document.querySelectorAll("#edit-card-note");
-        var editModalTitle = document.getElementById("edit-modal-title");
-        var editModalNote = document.getElementById("edit-modal-note");
-        var modalForm = document.getElementById('edit-modal-form')
+        let btnEditList = document.querySelectorAll("#btn-edit");
+        let editCardTitleList = document.querySelectorAll("#edit-card-title");
+        let editCardNoteList = document.querySelectorAll("#edit-card-note");
+        let editModalTitle = document.getElementById("edit-modal-title");
+        let editModalNote = document.getElementById("edit-modal-note");
+        let modalForm = document.getElementById('edit-modal-form')
 
         // Add click event listener to each button
         btnEditList.forEach(function (btnEdit, index) {
             btnEdit.addEventListener("click", function () {
                 // Get the corresponding card title and note and copy it to the modals
-                var cardTitle = editCardTitleList[index].innerText;
-                var cardNote = editCardNoteList[index].innerText;
-                var cardId = editCardTitleList[index].getAttribute('data-id')
+                let cardTitle = editCardTitleList[index].innerText;
+                let cardNote = editCardNoteList[index].innerText;
+                let cardId = editCardTitleList[index].getAttribute('data-id')
                 editModalTitle.value = cardTitle;
                 editModalNote.value = cardNote;
                 modalForm.setAttribute('action', `/notes/${cardId}/edit`)
             });
         });
     }); 
+</script>
+
+<script>
+    // Function to convert phone numbers, emails, and websites into clickable links
+    function convertTextLinks() {
+        let cards = document.getElementsByClassName('card');
+        let titles = document.getElementsByClassName('card-title')
+        let bodies = document.getElementsByClassName('card-text')
+        const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+        const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+        const websiteRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = titles[i];
+            let body = bodies[i];
+            let titleText = title.innerHTML;
+            let bodyText = body.innerHTML;
+            let titleWords = titleText.split(' ');
+            let bodyWords = bodyText.split(' ');
+
+            for (let j = 0; j < titleWords.length; j++) {
+                let titleWord = titleWords[j];
+
+                if (phoneRegex.test(titleWord)) {
+                    titleText = titleText.replace(titleWord, '<a href="tel:' + titleWord.replace(/[-.\s()]/g, '') + '">' + titleWord + '</a>');
+                } else if (emailRegex.test(titleWord)) {
+                    titleText = titleText.replace(titleWord, '<a href="mailto:' + titleWord + '">' + titleWord + '</a>');
+                } else if (websiteRegex.test(titleWord)) {
+                    titleText = titleText.replace(titleWord, '<a href="' + titleWord + '">' + titleWord + '</a>');
+                }
+            }
+
+            for (let k = 0; k < bodyWords.length; k++) {
+                let bodyWord = bodyWords[k];
+
+                if (phoneRegex.test(bodyWord)) {
+                    bodyText = bodyText.replace(bodyWord, '<a href="tel:' + bodyWord.replace(/[-.\s()]/g, '') + '">' + bodyWord + '</a>');
+                } else if (emailRegex.test(bodyWord)) {
+                    bodyText = bodyText.replace(bodyWord, '<a href="mailto:' + bodyWord + '">' + bodyWord + '</a>');
+                } else if (websiteRegex.test(bodyWord)) {
+                    bodyText = bodyText.replace(bodyWord, '<a href="' + bodyWord + '">' + bodyWord + '</a>');
+                }
+            }
+            title.innerHTML = titleText;
+            body.innerHTML = bodyText;
+        }
+
+    }
+    // Call the conversion function when the page is loaded
+    window.onload = function () {
+        convertTextLinks();
+    };
 </script>
