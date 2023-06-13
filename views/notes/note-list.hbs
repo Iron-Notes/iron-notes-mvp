@@ -1,29 +1,28 @@
 <link rel="stylesheet" href="/stylesheets/modal.css">
 
 <a href="/notes/create" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#modal-create">
-    <h3 class="d-flex fa-regular fa-note-sticky">
+    <h3 style="margin:0; padding-top: 10px;" class="d-flex fa-regular fa-note-sticky">
         <p>Add Note</p>
     </h3>
 </a>
 <div class="row">
     {{#each notes}}
-        <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
-             <form method="post" action="/notes/{{this._id}}/delete">
-                <div class="card" style="max-height: 20vh; overflow-y: auto">
-                    <div class="d-flex justify-content-end">
-                        <button id="btn-edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
-                            data-bs-toggle="modal" data-bs-target="#modal-edit"></button>
-                        <button type="submit" href="/notes/trash"
-                            class="btn btn-outline-danger fa-regular fa-trash-can m-1"></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
-                        <hr>
-                        <p id="edit-card-note" class="card-text">{{this.description}}</p>
-                    </div>
-                </div>
-            </form>
+    <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
+        <div class="card" style="max-height: 20vh; overflow-y: auto">
+            <div class="d-flex justify-content-end">
+                <button id="btn-edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
+                    data-bs-toggle="modal" data-bs-target="#modal-edit"></button>
+                <form id="delete-form" style="margin:0" method="post" action="/notes/{{this._id}}/delete">
+                    <button type="submit" class="btn btn-outline-danger fa-regular fa-trash-can m-1"></button>
+                </form>
+            </div>
+            <div class="card-body">
+                <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
+                <hr>
+                <p id="edit-card-note" class="card-text">{{this.description}}</p>
+            </div>
         </div>
+    </div>
     {{/each}}
 </div>
 
@@ -68,7 +67,9 @@
         </div>
     </div>
 </form>
-
+{{#unless notes}}
+<h2>Add a new Note!</h2>
+{{/unless}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Get all the necessary elements
@@ -78,6 +79,7 @@
         var editModalTitle = document.getElementById("edit-modal-title");
         var editModalNote = document.getElementById("edit-modal-note");
         var modalForm = document.getElementById('edit-modal-form')
+
         // Add click event listener to each button
         btnEditList.forEach(function (btnEdit, index) {
             btnEdit.addEventListener("click", function () {
@@ -90,5 +92,5 @@
                 modalForm.setAttribute('action', `/notes/${cardId}/edit`)
             });
         });
-    });
+    }); 
 </script>
