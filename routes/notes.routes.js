@@ -155,10 +155,6 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
     updateFields.label = label;
   }
 
-  if (image) {
-    updateFields.image = image;
-  }
-
   Note.findByIdAndUpdate(noteId, updateFields, { new: true })
     .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
