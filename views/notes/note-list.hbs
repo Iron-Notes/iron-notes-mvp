@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/stylesheets/modal.css">
 
 <a href="/notes/create" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#modal-create">
-    <h3 class="d-flex fa-regular fa-note-sticky">
+    <h3 style="margin:0; padding-top: 10px;" class="d-flex fa-regular fa-note-sticky">
         <p>Add Note</p>
     </h3>
 </a>
@@ -67,7 +67,9 @@
         </div>
     </div>
 </form>
-
+{{#unless notes}}
+<h2>Add a new Note!</h2>
+{{/unless}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Get all the necessary elements

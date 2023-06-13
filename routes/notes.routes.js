@@ -17,7 +17,6 @@ router.get("/notes/list", isLoggedIn, (req, res, next) => {
 
 // READ notes with status "deleted" in a view called "trash"
 router.get("/notes/trash", isLoggedIn, (req, res, next) => {
-  const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
   Note.find({ user: userId, status: "deleted" })
     .then((deletedNotes) => {
@@ -85,7 +84,16 @@ router.post("/notes/:noteId/restore", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findByIdAndUpdate(noteId, { status: "active" })
-    .then(() => res.redirect("/notes/list"))
+    .then(() => res.redirect("/notes/trash"))
+    .catch((error) => next(error));
+});
+
+// HARD-DELETE just one note
+router.post("/notes/:noteId/deleteone", isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+
+  Note.findByIdAndDelete(noteId)
+    .then(() => res.redirect("/notes/trash"))
     .catch((error) => next(error));
 });
 
