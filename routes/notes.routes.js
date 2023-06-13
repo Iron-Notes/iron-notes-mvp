@@ -39,17 +39,17 @@ router.post(
   fileUploader.single("note-image"),
   (req, res, next) => {
     const { title, description, checklist, label, backgroundColor } = req.body;
-
-    const imageURL = req.file.path;
+    
     const userId = req.session.currentUser._id;
+    const imageURL = req.file ? req.file.path : undefined;
 
     const newNote = {
       title,
       description,
-      user: userId,
+      user: userId
     };
 
-    if (imageURL) {
+    if (imageURL !== undefined) {
       newNote.imageURL = imageURL;
     }
 
@@ -63,10 +63,6 @@ router.post(
 
     if (backgroundColor) {
       newNote.backgroundColor = backgroundColor;
-    }
-
-    if (image) {
-      newNote.image = image;
     }
 
     Note.create(newNote)
@@ -150,7 +146,7 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
   if (imageURL) {
     newNote.imageURL = imageURL;
   }
-  
+
   if (checklist) {
     updateFields.checklist = checklist;
   }

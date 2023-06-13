@@ -24,7 +24,9 @@ const noteSchema = new Schema(
     },
     checklist: [checklistSchema],
     label: [labelSchema],
-    imageURL: String,
+    imageURL: {
+      type: String
+    },
     backgroundColor: {
       type: String,
       enum: ["grey", "red", "green"],
