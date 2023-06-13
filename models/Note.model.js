@@ -9,7 +9,7 @@ const checklistSchema = new Schema({
 });
 
 const labelSchema = new Schema({
-  name: String
+  name: String,
 });
 
 const noteSchema = new Schema(
@@ -24,10 +24,7 @@ const noteSchema = new Schema(
     },
     checklist: [checklistSchema],
     label: [labelSchema],
-    image: {
-      cloudinaryId: String,
-      imageUrl: String,
-    },
+    imageURL: String,
     backgroundColor: {
       type: String,
       enum: ["grey", "red", "green"],

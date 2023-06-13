@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middleware/isLoggedIn");
 const Note = require("../models/Note.model");
+const fileUploader = require("../config/cloudinary.config");
 
 // READ notes with status "active", also providing userDetails and notes (of the current user)
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
@@ -33,43 +34,52 @@ router.get("/notes/create", isLoggedIn, (req, res, next) => {
 });
 
 // CREATE new note > post into DB ensuring that optional fields that are empty are not to store with value 'undefined'
-router.post("/notes/create", isLoggedIn, (req, res, next) => {
-  const { title, description, checklist, label, backgroundColor, image } =
-    req.body;
+router.post(
+  "/notes/create",
+  isLoggedIn,
+  fileUploader.single("note-image"),
+  (req, res, next) => {
+    const { title, description, checklist, label, backgroundColor } = req.body;
 
-  const userId = req.session.currentUser._id;
+    const imageURL = req.file.path;
+    const userId = req.session.currentUser._id;
 
-  const newNote = {
-    title,
-    description,
-    user: userId,
-  };
+    const newNote = {
+      title,
+      description,
+      user: userId,
+    };
 
-  if (checklist) {
-    newNote.checklist = checklist;
+    if (imageURL) {
+      newNote.imageURL = imageURL;
+    }
+
+    if (checklist) {
+      newNote.checklist = checklist;
+    }
+
+    if (label) {
+      newNote.label = label;
+    }
+
+    if (backgroundColor) {
+      newNote.backgroundColor = backgroundColor;
+    }
+
+    if (image) {
+      newNote.image = image;
+    }
+
+    Note.create(newNote)
+      .then((newNote) => {
+        res.redirect("/notes/list");
+      })
+      .catch((e) => {
+        console.log("Error creating new note", e);
+        next(e);
+      });
   }
-
-  if (label) {
-    newNote.label = label;
-  }
-
-  if (backgroundColor) {
-    newNote.backgroundColor = backgroundColor;
-  }
-
-  if (image) {
-    newNote.image = image;
-  }
-
-  Note.create(newNote)
-    .then((newNote) => {
-      res.redirect("/notes/list");
-    })
-    .catch((e) => {
-      console.log("Error creating new note", e);
-      next(e);
-    });
-});
+);
 
 // SOFT-DELETE note from database by updating status to "deleted"
 router.post("/notes/:noteId/delete", isLoggedIn, (req, res, next) => {
@@ -119,7 +129,7 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
     checklist,
     label,
     backgroundColor,
-    image,
+    imageURL
   } = req.body;
 
   const updateFields = {
@@ -129,6 +139,10 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
     backgroundColor,
   };
 
+  if (imageURL) {
+    newNote.imageURL = imageURL;
+  }
+  
   if (checklist) {
     updateFields.checklist = checklist;
   }
