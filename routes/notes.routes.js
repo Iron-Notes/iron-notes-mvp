@@ -41,7 +41,6 @@ router.post(
     const { title, description, checklist, label, backgroundColor } = req.body;
     
     const userId = req.session.currentUser._id;
-    const imageURL = req.file ? req.file.path : undefined;
 
     const newNote = {
       title,
@@ -49,8 +48,8 @@ router.post(
       user: userId
     };
 
-    if (imageURL !== undefined) {
-      newNote.imageURL = imageURL;
+    if (req.file) {
+      newNote.imageURL = req.file.path;
     }
 
     if (checklist) {
@@ -124,7 +123,7 @@ router.get("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
 });
 
 // UPDATE note and see details > process update ensuring empty optional fields not stored as 'undefined'
-router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
+router.post("/notes/:noteId/edit", isLoggedIn, fileUploader.single("note-image"), (req, res, next) => {
   const { noteId } = req.params;
   const {
     title,
@@ -133,7 +132,7 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
     checklist,
     label,
     backgroundColor,
-    imageURL
+    existingImage
   } = req.body;
 
   const updateFields = {
@@ -143,8 +142,10 @@ router.post("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
     backgroundColor,
   };
 
-  if (imageURL) {
-    newNote.imageURL = imageURL;
+  if (req.file) {
+    updateFields.imageUrl = req.file.path;
+  } else {
+    updateFields.imageUrl = existingImage;
   }
 
   if (checklist) {
