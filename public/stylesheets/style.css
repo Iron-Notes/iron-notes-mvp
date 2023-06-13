@@ -1,8 +1,8 @@
-*{
-  font-family: 'Poppins', sans-serif;
-  }
+* {
+  font: 14px "Poppins", Helvetica, Arial, sans-serif;
+}
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
 }
 
 a {

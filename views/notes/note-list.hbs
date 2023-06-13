@@ -7,23 +7,22 @@
 </a>
 <div class="row">
     {{#each notes}}
-        <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
-             <form method="post" action="/notes/{{this._id}}/delete">
-                <div class="card" style="max-height: 20vh; overflow-y: auto">
-                    <div class="d-flex justify-content-end">
-                        <button id="btn-edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
-                            data-bs-toggle="modal" data-bs-target="#modal-edit"></button>
-                        <button type="submit" href="/notes/trash"
-                            class="btn btn-outline-danger fa-regular fa-trash-can m-1"></button>
-                    </div>
-                    <div class="card-body">
-                        <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
-                        <hr>
-                        <p id="edit-card-note" class="card-text">{{this.description}}</p>
-                    </div>
-                </div>
-            </form>
+    <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
+        <div class="card" style="max-height: 20vh; overflow-y: auto">
+            <div class="d-flex justify-content-end">
+                <button id="btn-edit" class="btn btn-outline-warning fa-regular fa-pen-to-square m-1"
+                    data-bs-toggle="modal" data-bs-target="#modal-edit"></button>
+                <form id="delete-form" style="margin:0" method="post" action="/notes/{{this._id}}/delete">
+                    <button type="submit" class="btn btn-outline-danger fa-regular fa-trash-can m-1"></button>
+                </form>
+            </div>
+            <div class="card-body">
+                <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
+                <hr>
+                <p id="edit-card-note" class="card-text">{{this.description}}</p>
+            </div>
         </div>
+    </div>
     {{/each}}
 </div>
 
@@ -78,6 +77,7 @@
         var editModalTitle = document.getElementById("edit-modal-title");
         var editModalNote = document.getElementById("edit-modal-note");
         var modalForm = document.getElementById('edit-modal-form')
+
         // Add click event listener to each button
         btnEditList.forEach(function (btnEdit, index) {
             btnEdit.addEventListener("click", function () {
@@ -90,5 +90,5 @@
                 modalForm.setAttribute('action', `/notes/${cardId}/edit`)
             });
         });
-    });
+    }); 
 </script>
