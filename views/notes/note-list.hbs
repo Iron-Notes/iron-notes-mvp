@@ -19,14 +19,17 @@
             <div class="card-body">
                 <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
                 <hr>
-                <p id="edit-card-note" class="card-text">{{this.description}}</p>
+                <div>
+                    <p id="edit-card-note" class="card-text">{{this.description}}</p>
+                    <img src="{{this.imageURL}}" class="card-img-top" alt="...image missing">
+                </div>
             </div>
         </div>
     </div>
     {{/each}}
 </div>
 
-<form method="post" action="/notes/create">
+<form method="post" action="/notes/create" enctype="multipart/form-data">
     <div class="modal fade" id="modal-create">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
             <div class="modal-content">
@@ -39,8 +42,14 @@
                     <textarea class="modal-textarea" name="description" rows="10" placeholder="Note"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit"
-                        class="btn btn-outline-success fa-regular fa-pen-to-square m-1 fa-regular fa-floppy-disk"></button>
+
+                    <div class="input-group mb-3">
+                        <input type="file" name="note-image" class="form-control-file form-control"
+                            placeholder="File Path..." aria-label="File Path..." />
+                        <button type="submit"
+                            class="btn btn-outline-success fa-regular fa-pen-to-square m-1 fa-regular fa-floppy-disk"></button>
+                    </div>
+
                 </div>
             </div>
         </div>
