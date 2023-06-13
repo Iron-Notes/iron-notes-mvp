@@ -21,7 +21,9 @@
                 <hr>
                 <div>
                     <p id="edit-card-note" class="card-text">{{this.description}}</p>
+                    {{#if this.imageURL}}
                     <img src="{{this.imageURL}}" class="card-img-top" alt="...image missing">
+                    {{/if}}
                 </div>
             </div>
         </div>
