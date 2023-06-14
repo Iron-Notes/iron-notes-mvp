@@ -38,11 +38,12 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
             <div class="modal-content">
                 <div class="modal-header">
-                    <input class="modal-input" type="text" name="title" placeholder="Title" required></input>
+                    <input class="modal-input" type="text" name="title" placeholder="Title" maxlength="40"
+                        required></input>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <textarea class="modal-textarea" name="description" rows="10" placeholder="Note"
+                    <textarea class="modal-textarea" name="description" rows="10" placeholder="Note" maxlength="300"
                         required></textarea>
                 </div>
                 <div class="modal-footer">
@@ -64,12 +65,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <input id="edit-modal-title" class="modal-input" type="text" name="title" placeholder="Title"
-                        required>
+                        maxlength="40" required>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <textarea id="edit-modal-note" class="modal-textarea" name="description" rows="10"
-                        placeholder="Note" required></textarea>
+                        placeholder="Note" maxlength="300" required></textarea>
                     <div id="edit-modal-img-container" class="container position-relative">
                         <img src="" id="edit-modal-card-img" class="edit-modal-card-img w-100" alt="Image missing">
                         <button type="button" id="btn-delete-img"

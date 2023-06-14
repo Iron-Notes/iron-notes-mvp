@@ -8,8 +8,15 @@ const fileUploader = require("../config/cloudinary.config");
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
+  let keyword = req.query.keyword;
+  let filter = {};
+  if (keyword) {
+    filter = { user: userId, title: keyword, status: "active" };
+  } else {
+    filter = { user: userId, status: "active" };
+  }
 
-  Note.find({ user: userId, status: "active" })
+  Note.find(filter)
     .then((notes) => {
       res.render("notes/note-list", { userDetails, notes });
     })
@@ -39,13 +46,13 @@ router.post(
   fileUploader.single("note-image"),
   (req, res, next) => {
     const { title, description, checklist, label, backgroundColor } = req.body;
-    
+
     const userId = req.session.currentUser._id;
 
     const newNote = {
       title,
       description,
-      user: userId
+      user: userId,
     };
 
     if (req.file) {
@@ -123,42 +130,47 @@ router.get("/notes/:noteId/edit", isLoggedIn, (req, res, next) => {
 });
 
 // UPDATE note and see details > process update ensuring empty optional fields not stored as 'undefined'
-router.post("/notes/:noteId/edit", isLoggedIn, fileUploader.single("note-image"), (req, res, next) => {
-  const { noteId } = req.params;
-  const {
-    title,
-    description,
-    status,
-    checklist,
-    label,
-    backgroundColor,
-    existingImage
-  } = req.body;
+router.post(
+  "/notes/:noteId/edit",
+  isLoggedIn,
+  fileUploader.single("note-image"),
+  (req, res, next) => {
+    const { noteId } = req.params;
+    const {
+      title,
+      description,
+      status,
+      checklist,
+      label,
+      backgroundColor,
+      existingImage,
+    } = req.body;
 
-  const updateFields = {
-    title,
-    description,
-    status,
-    backgroundColor,
-  };
+    const updateFields = {
+      title,
+      description,
+      status,
+      backgroundColor,
+    };
 
-  if (req.file) {
-    updateFields.imageURL = req.file.path;
-  } else {
-    updateFields.imageURL = existingImage;
+    if (req.file) {
+      updateFields.imageURL = req.file.path;
+    } else {
+      updateFields.imageURL = existingImage;
+    }
+
+    if (checklist) {
+      updateFields.checklist = checklist;
+    }
+
+    if (label) {
+      updateFields.label = label;
+    }
+
+    Note.findByIdAndUpdate(noteId, updateFields, { new: true })
+      .then(() => res.redirect("/notes/list"))
+      .catch((error) => next(error));
   }
-
-  if (checklist) {
-    updateFields.checklist = checklist;
-  }
-
-  if (label) {
-    updateFields.label = label;
-  }
-
-  Note.findByIdAndUpdate(noteId, updateFields, { new: true })
-    .then(() => res.redirect("/notes/list"))
-    .catch((error) => next(error));
-});
+);
 
 module.exports = router;

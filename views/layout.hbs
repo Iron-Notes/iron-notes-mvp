@@ -58,8 +58,8 @@
               <i class="fas fa-adjust"></i> <!-- Font Awesome adjust icon -->
             </button>
           </div>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" {{#unless
+          <form method="get" action="/notes/list?keyword=" class="d-flex" role="search">
+            <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search" {{#unless
               userDetails}}readonly{{/unless}}>
             <button class="btn btn-outline-primary {{#unless userDetails}}disabled{{/unless}}"
               type="submit">Search</button>
