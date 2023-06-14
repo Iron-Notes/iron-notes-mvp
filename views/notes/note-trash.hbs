@@ -20,7 +20,12 @@
             <div class="card-body">
                 <h5 id="edit-card-title" class="card-title" data-id="{{this._id}}">{{this.title}}</h5>
                 <hr>
-                <p id="edit-card-note" class="card-text">{{this.description}}</p>
+                <div>
+                    <p id="edit-card-note" class="card-text">{{this.description}}</p>
+                    {{#if this.imageURL}}
+                    <img src="{{this.imageURL}}" class="card-img-top" alt="...image missing">
+                    {{/if}}
+                </div>
             </div>
         </div>
     </div>
