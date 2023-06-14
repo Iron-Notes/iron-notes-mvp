@@ -26,9 +26,17 @@ router.get("/notes/list", isLoggedIn, (req, res, next) => {
 // READ notes with status "deleted" in a view called "trash"
 router.get("/notes/trash", isLoggedIn, (req, res, next) => {
   const userId = req.session.currentUser._id;
-  Note.find({ user: userId, status: "deleted" })
+  const userDetails = req.session.currentUser;
+  let keyword = req.query.keyword;
+  let filter = {};
+  if (keyword) {
+    filter = { user: userId, title: keyword, status: "deleted" };
+  } else {
+    filter = { user: userId, status: "deleted" };
+  }
+
+  Note.find(filter)
     .then((deletedNotes) => {
-      const userDetails = req.session.currentUser;
       res.render("notes/note-trash", { deletedNotes, userDetails });
     })
     .catch((error) => next(error));
@@ -38,7 +46,16 @@ router.get("/notes/trash", isLoggedIn, (req, res, next) => {
 router.get("/notes/archive", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
-  Note.find({ user: userId, status: "archived" })
+
+  let keyword = req.query.keyword;
+  let filter = {};
+  if (keyword) {
+    filter = { user: userId, title: keyword, status: "archived" };
+  } else {
+    filter = { user: userId, status: "archived" };
+  }
+
+  Note.find(filter)
     .then((notes) => {
       res.render("notes/note-archive", { userDetails, notes });
     })
