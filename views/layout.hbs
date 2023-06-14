@@ -1,4 +1,4 @@
-<html lang="en" data-bs-theme="light">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -55,7 +55,7 @@
             </a>
 
             <button class="btn btn-link nav-link" id="btnSwitch">
-              <i class="fas fa-adjust"></i> <!-- Font Awesome adjust icon -->
+              <i class="fas fa-adjust"></i>
             </button>
           </div>
           <form id="form-search" method="get" action="" class="d-flex" role="search">
@@ -97,14 +97,22 @@
   <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
 
   <script>
-    document.getElementById('btnSwitch').addEventListener('click', () => {
-      if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
-        document.documentElement.setAttribute('data-bs-theme', 'light')
+    function toggleDarkMode() {
+      const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-bs-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const themePreference = localStorage.getItem('theme');
+      if (themePreference) {
+        document.documentElement.setAttribute('data-bs-theme', themePreference);
       }
-      else {
-        document.documentElement.setAttribute('data-bs-theme', 'dark')
-      }
-    })
+    });
+
+    const darkModeButton = document.getElementById('btnSwitch');
+    darkModeButton.addEventListener('click', toggleDarkMode);
   </script>
 
   <script>
