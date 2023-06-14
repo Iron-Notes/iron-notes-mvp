@@ -1,10 +1,13 @@
 <link rel="stylesheet" href="/stylesheets/modal.css">
 
-<a href="/notes/create" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#modal-create">
-    <h3 style="margin:0; padding-top: 10px;" class="d-flex fa-regular fa-note-sticky">
-        <p>Add Note</p>
-    </h3>
-</a>
+<form method="post" action="/notes/restoreArchived">
+    <button type="submit" class="btn btn-outline-success m-2">
+        <h3 style="margin:0; padding-top: 10px;" class="d-flex fa-solid fa-rotate-left">
+            <p>Restore All</p>
+        </h3>
+    </button>
+</form>
+
 <div class="row">
     {{#each notes}}
     <div class="col-xl-3 col-lg-4 col-md-5 col-sm-12 pt-3">
@@ -12,11 +15,11 @@
             <div class="d-flex justify-content-end">
                 <button class="btn btn-outline-warning fa-regular fa-pen-to-square m-1" data-bs-toggle="modal"
                     data-bs-target="#modal-edit" data-note-id="{{this._id}}"></button>
+                <form id="restore-form" style="margin:0" method="post" action="/notes/{{this._id}}/restore">
+                    <button type="submit" class="btn btn-outline-success fa-solid fa-rotate-left m-1"></button>
+                </form>
                 <form class="delete-form" style="margin:0" method="post" action="/notes/{{this._id}}/delete">
                     <button type="submit" class="btn btn-outline-danger fa-regular fa-trash-can m-1"></button>
-                </form>
-                <form class="archive-form" style="margin:0" method="post" action="/notes/{{this._id}}/archive">
-                    <button type="submit" class="btn btn-outline-info fa-regular fa-folder m-1"></button>
                 </form>
             </div>
             <div class="card-body">

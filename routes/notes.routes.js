@@ -34,9 +34,15 @@ router.get("/notes/trash", isLoggedIn, (req, res, next) => {
     .catch((error) => next(error));
 });
 
-// CREATE new note > display form
-router.get("/notes/create", isLoggedIn, (req, res, next) => {
-  res.render("notes/note-create");
+// READ notes with status "archived" in a view called "archive"
+router.get("/notes/archive", isLoggedIn, (req, res, next) => {
+  const userDetails = req.session.currentUser;
+  const userId = req.session.currentUser._id;
+  Note.find({ user: userId, status: "archived" })
+    .then((notes) => {
+      res.render("notes/note-archive", { userDetails, notes });
+    })
+    .catch((error) => next(error));
 });
 
 // CREATE new note > post into DB ensuring that optional fields that are empty are not to store with value 'undefined'
@@ -87,16 +93,37 @@ router.post("/notes/:noteId/delete", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findByIdAndUpdate(noteId, { status: "deleted" })
-    .then(() => res.redirect("/notes/list"))
+    .then(() => res.redirect("back"))
     .catch((error) => next(error));
 });
 
-// RESTORE deleted note from "trash" by setting it "active"
+// ARCHIVE note by updating status to "archived"
+router.post("/notes/:noteId/archive", isLoggedIn, (req, res, next) => {
+  const { noteId } = req.params;
+
+  Note.findByIdAndUpdate(noteId, { status: "archived" })
+    .then(() => res.redirect("back"))
+    .catch((error) => next(error));
+});
+
+// RESTORE archived/deleted note from by setting it "active"
 router.post("/notes/:noteId/restore", isLoggedIn, (req, res, next) => {
   const { noteId } = req.params;
 
   Note.findByIdAndUpdate(noteId, { status: "active" })
-    .then(() => res.redirect("/notes/trash"))
+    .then(() => res.redirect("back"))
+    .catch((error) => next(error));
+});
+
+// RESTORE all archived notes by setting status to active
+router.post("/notes/restoreArchived", isLoggedIn, (req, res, next) => {
+  const userId = req.session.currentUser._id;
+  const condition = {
+    user: userId,
+    status: "archive",
+  };
+  Note.updateMany({ condition, status: "active" })
+    .then(() => res.redirect("/notes/list"))
     .catch((error) => next(error));
 });
 
@@ -168,7 +195,7 @@ router.post(
     }
 
     Note.findByIdAndUpdate(noteId, updateFields, { new: true })
-      .then(() => res.redirect("/notes/list"))
+      .then(() => res.redirect("back"))
       .catch((error) => next(error));
   }
 );
