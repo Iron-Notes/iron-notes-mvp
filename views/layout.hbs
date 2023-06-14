@@ -53,11 +53,11 @@
               Log In
               {{/if}}
             </a>
-     
-<button class="btn btn-link nav-link" id="btnSwitch">
-  <i class="fas fa-adjust"></i> <!-- Font Awesome adjust icon -->
-</button>
-     </div>
+
+            <button class="btn btn-link nav-link" id="btnSwitch">
+              <i class="fas fa-adjust"></i> <!-- Font Awesome adjust icon -->
+            </button>
+          </div>
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" {{#unless
               userDetails}}readonly{{/unless}}>
@@ -74,22 +74,6 @@
     {{{body}}}
   </div>
 
-<!-- Footer-->
-    <div class="py-3 bg-dark text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7 text-center text-md-left">
-                    <p class="mb-md-0">(C) 2023 IronNotes - Fabio & Marco</p>
-                </div>
-                <div class="col-md-5 text-center text-md-right">
-                    <p class="mb-0"><a href="https://github.com/Iron-Notes/iron-notes-mvp" target="_blank" class="external text-white">Github Repo</a> </p>
-                </div>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="/js/script.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
@@ -100,28 +84,43 @@
 
   <script>
     function setBodyPaddingTopAndBottom() {
-      const navbarHeight = document.querySelector('#main-navbar').offsetHeight;
+      const navbarHeight = document.getElementById('main-navbar').offsetHeight;
       const footerHeight = document.getElementById('footer').offsetHeight;
       document.body.style.paddingTop = navbarHeight + 10 + 'px';
       document.body.style.paddingBottom = footerHeight + 10 + 'px';
 
     }
-
     window.addEventListener('load', setBodyPaddingTopAndBottom);
     window.addEventListener('resize', setBodyPaddingTopAndBottom);
   </script>
+
   <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
 
-<script>
-document.getElementById('btnSwitch').addEventListener('click',()=>{
-    if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
-        document.documentElement.setAttribute('data-bs-theme','light')
-    }
-    else {
-        document.documentElement.setAttribute('data-bs-theme','dark')
-    }
-})
-</script>
+  <script>
+    document.getElementById('btnSwitch').addEventListener('click', () => {
+      if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+        document.documentElement.setAttribute('data-bs-theme', 'light')
+      }
+      else {
+        document.documentElement.setAttribute('data-bs-theme', 'dark')
+      }
+    })
+  </script>
 </body>
+
+<!-- Footer-->
+<div class="fixed-bottom py-3 bg-dark text-white" id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7 text-center text-md-left">
+        <p class="mb-md-0">(C) 2023 IronNotes - Fabio & Marco</p>
+      </div>
+      <div class="col-md-5 text-center text-md-right">
+        <p class="mb-0"><a href="https://github.com/Iron-Notes/iron-notes-mvp" target="_blank"
+            class="external text-white">Github Repo</a> </p>
+      </div>
+    </div>
+  </div>
+</div>
 
 </html>

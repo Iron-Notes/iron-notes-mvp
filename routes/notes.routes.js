@@ -143,9 +143,9 @@ router.post("/notes/:noteId/edit", isLoggedIn, fileUploader.single("note-image")
   };
 
   if (req.file) {
-    updateFields.imageUrl = req.file.path;
+    updateFields.imageURL = req.file.path;
   } else {
-    updateFields.imageUrl = existingImage;
+    updateFields.imageURL = existingImage;
   }
 
   if (checklist) {

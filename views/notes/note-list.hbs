@@ -7,8 +7,8 @@
 </a>
 <div class="row">
     {{#each notes}}
-    <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12 pt-3">
-        <div class="card" style="max-height: 20vh; overflow-y: auto">
+    <div class="col-xl-3 col-lg-4 col-md-5 col-sm-12 pt-3">
+        <div class="card" style="max-height: 30vh; overflow-y: auto">
             <div class="d-flex justify-content-end">
                 <button class="btn btn-outline-warning fa-regular fa-pen-to-square m-1" data-bs-toggle="modal"
                     data-bs-target="#modal-edit" data-note-id="{{this._id}}"></button>
@@ -65,16 +65,23 @@
                 <div class="modal-header">
                     <input id="edit-modal-title" class="modal-input" type="text" name="title" placeholder="Title"
                         required>
-                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <textarea id="edit-modal-note" class="modal-textarea" name="description" rows="10"
                         placeholder="Note" required></textarea>
-                    <img src="" id="edit-modal-card-img" class="edit-modal-card-img" alt="Image missing">
+                    <div id="edit-modal-img-container" class="container position-relative">
+                        <img src="" id="edit-modal-card-img" class="edit-modal-card-img w-100" alt="Image missing">
+                        <button type="button" id="btn-delete-img"
+                            class="btn-close position-absolute btn btn-outline-danger" aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="input-group mb-3">
-                        <input type="file" name="note-image" class="form-control-file form-control" />
+                        <input type="file" name="note-image" id="edit-modal-new-img"
+                            class="form-control-file form-control" />
+                        <input type="text" name="existingImage" id="edit-modal-existing-img" style="display: none;"
+                            value="">
                         <button type="submit"
                             class="btn btn-outline-success fa-regular fa-pen-to-square m-1 fa-regular fa-floppy-disk"></button>
                     </div>
@@ -89,6 +96,20 @@
 {{/unless}}
 
 <script>
+    // Get the button element
+    const deleteButton = document.getElementById("btn-delete-img");
+    const editModalCardImg = document.getElementById("edit-modal-card-img");
+    const editModalExistingImg = document.getElementById("edit-modal-existing-img"); // New line
+    // Add a click event listener
+    deleteButton.addEventListener('click', function () {
+        editModalExistingImg.value = "";
+        editModalExistingImg.setAttribute("value", "")
+        editModalCardImg.style.display = "none";
+        deleteButton.style.display = "none";
+    });
+</script>
+
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         // Get all the necessary elements
         const btnEditList = document.querySelectorAll(".btn-outline-warning");
@@ -98,20 +119,34 @@
         const editModalNote = document.getElementById("edit-modal-note");
         const modalForm = document.getElementById("edit-modal-form");
         const cardImgList = document.querySelectorAll(".card-img");
-        const editModalCardImg = document.getElementById('edit-modal-card-img');
+        const editModalCardImg = document.getElementById("edit-modal-card-img");
+        const editModalExistingImg = document.getElementById("edit-modal-existing-img"); // New line
+        const deleteButton = document.getElementById("btn-delete-img");
 
         // Add click event listener to each button
         btnEditList.forEach(function (btnEdit, index) {
             btnEdit.addEventListener("click", function () {
-                // Get the corresponding card title and note and copy it to the modals
+                // Get the corresponding card and copy to the modal
                 const cardTitle = editCardTitleList[index].innerText;
                 const cardNote = editCardNoteList[index].innerText;
                 const cardId = editCardTitleList[index].getAttribute("data-note-id");
                 editModalTitle.value = cardTitle;
                 editModalNote.value = cardNote;
                 modalForm.action = `/notes/${cardId}/edit`;
+
                 // Copy the src of card-img to the edit-modal-card-img
-                editModalCardImg.src = cardImgList[index].src;
+                if (cardImgList[index].src.slice(-4) === ".jpg" || cardImgList[index].src.slice(-4) === ".png") {
+                    editModalCardImg.src = cardImgList[index].src;
+                    editModalExistingImg.value = cardImgList[index].src;
+                    editModalExistingImg.setAttribute("value", cardImgList[index].src)
+                    editModalCardImg.style.display = "inline";
+                    deleteButton.style.display = "inline-block";
+                } else {
+                    editModalExistingImg.setAttribute("value", "")
+                    editModalExistingImg.value = "";
+                    editModalCardImg.style.display = "none";
+                    deleteButton.style.display = "none";
+                }
             });
         });
     });
@@ -139,7 +174,7 @@
                 let titleWord = titleWords[j];
 
                 if (phoneRegex.test(titleWord)) {
-                    titleText = titleText.replace(titleWord, `<a href="tel:${titleWord.replace(/[-.\s()]/g, '')}">${titleWord}</a>`);
+                    titleText = titleText.replace(titleWord, `<a href="tel:${titleWord.replace(/[-.\s()]/g, "")}">${titleWord}</a>`);
                 } else if (emailRegex.test(titleWord)) {
                     titleText = titleText.replace(titleWord, `<a href="mailto:${titleWord}">${titleWord}</a>`);
                 } else if (websiteRegex.test(titleWord)) {
@@ -151,7 +186,7 @@
                 let bodyWord = bodyWords[k];
 
                 if (phoneRegex.test(bodyWord)) {
-                    bodyText = bodyText.replace(bodyWord, `<a href="tel:${bodyWord.replace(/[-.\s()]/g, '')}">${bodyWord}</a>`);
+                    bodyText = bodyText.replace(bodyWord, `<a href="tel:${bodyWord.replace(/[-.\s()]/g, "")}">${bodyWord}</a>`);
                 } else if (emailRegex.test(bodyWord)) {
                     bodyText = bodyText.replace(bodyWord, `<a href="mailto:${bodyWord}">${bodyWord}</a>`);
                 } else if (websiteRegex.test(bodyWord)) {
