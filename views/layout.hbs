@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
   <meta charset="UTF-8" />
@@ -53,7 +53,11 @@
               Log In
               {{/if}}
             </a>
-          </div>
+     
+<button class="btn btn-link nav-link" id="btnSwitch">
+  <i class="fas fa-adjust"></i> <!-- Font Awesome adjust icon -->
+</button>
+     </div>
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" {{#unless
               userDetails}}readonly{{/unless}}>
@@ -71,46 +75,14 @@
   </div>
 
 <!-- Footer-->
-        <div class="py-5 bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 mb-4 mb-lg-0">
-                    <h5>Bootstrap 101</h5>
-                        <ul class="contact-info list-unstyled">
-                            <li><a href="#" class="text-dark">hello@buddy.works</a></li>
-                            <li><a href="#" class="text-dark">+00 000 00 000</a></li>
-                        </ul>
-                    <p class="text-muted">Some very vital disclaimer comes here.</p>
-                    </div>
-                <div class="col-lg-4 col-md-6">
-                    <h5>Information</h5>
-                        <ul class="links list-unstyled">
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                        </ul>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <h5>More Info</h5>
-                        <ul class="links list-unstyled">
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                            <li> <a href="#" class="text-muted">My Amazing Link</a></li>
-                        </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="py-3 bg-dark text-white">
         <div class="container">
             <div class="row">
                 <div class="col-md-7 text-center text-md-left">
-                    <p class="mb-md-0">(C) 2019 Buddy Corp. All rights reserved. </p>
+                    <p class="mb-md-0">(C) 2023 IronNotes - Fabio & Marco</p>
                 </div>
                 <div class="col-md-5 text-center text-md-right">
-                    <p class="mb-0">Bootstrap Landing Page by <a href="#" class="external text-white">Sufyan</a> </p>
+                    <p class="mb-0"><a href="https://github.com/Iron-Notes/iron-notes-mvp" target="_blank" class="external text-white">Github Repo</a> </p>
                 </div>
             </div>
         </div>
@@ -135,5 +107,15 @@
   </script>
   <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
 
+<script>
+document.getElementById('btnSwitch').addEventListener('click',()=>{
+    if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+        document.documentElement.setAttribute('data-bs-theme','light')
+    }
+    else {
+        document.documentElement.setAttribute('data-bs-theme','dark')
+    }
+})
+</script>
 </body>
 </html>
