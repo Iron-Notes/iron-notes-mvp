@@ -6,18 +6,31 @@ const fileUploader = require("../config/cloudinary.config");
 
 // READ notes with status "active", also providing userDetails and notes (of the current user)
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
-  const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
   let keyword = req.query.keyword;
-  let filter = {};
-  if (keyword) {
-    filter = { user: userId, title: keyword, status: "active" };
-  } else {
-    filter = { user: userId, status: "active" };
-  }
 
-  Note.find(filter)
+  Note.find()
     .then((notes) => {
+      let filteredNotes = [];
+      if (keyword) {
+        notes.forEach((note) => {
+          if (
+            note.title.includes(keyword) &&
+            note.user == userId &&
+            note.status === "active"
+          ) {
+            filteredNotes.push(note);
+          }
+        });
+      } else {
+        filteredNotes = notes.filter(
+          (note) => note.user == userId && note.status === "active"
+        );
+      }
+      return filteredNotes;
+    })
+    .then((notes) => {
+      const userDetails = req.session.currentUser;
       res.render("notes/note-list", { userDetails, notes });
     })
     .catch((error) => next(error));
@@ -26,37 +39,62 @@ router.get("/notes/list", isLoggedIn, (req, res, next) => {
 // READ notes with status "deleted" in a view called "trash"
 router.get("/notes/trash", isLoggedIn, (req, res, next) => {
   const userId = req.session.currentUser._id;
-  const userDetails = req.session.currentUser;
   let keyword = req.query.keyword;
-  let filter = {};
-  if (keyword) {
-    filter = { user: userId, title: keyword, status: "deleted" };
-  } else {
-    filter = { user: userId, status: "deleted" };
-  }
 
-  Note.find(filter)
+  Note.find()
+    .then((notes) => {
+      let filteredNotes = [];
+      if (keyword) {
+        notes.forEach((note) => {
+          if (
+            note.title.includes(keyword) &&
+            note.user == userId &&
+            note.status === "deleted"
+          ) {
+            filteredNotes.push(note);
+          }
+        });
+      } else {
+        filteredNotes = notes.filter(
+          (note) => note.user == userId && note.status === "deleted"
+        );
+      }
+      return filteredNotes;
+    })
     .then((deletedNotes) => {
-      res.render("notes/note-trash", { deletedNotes, userDetails });
+      const userDetails = req.session.currentUser;
+      res.render("notes/note-trash", { userDetails, deletedNotes });
     })
     .catch((error) => next(error));
 });
 
 // READ notes with status "archived" in a view called "archive"
 router.get("/notes/archive", isLoggedIn, (req, res, next) => {
-  const userDetails = req.session.currentUser;
   const userId = req.session.currentUser._id;
-
   let keyword = req.query.keyword;
-  let filter = {};
-  if (keyword) {
-    filter = { user: userId, title: keyword, status: "archived" };
-  } else {
-    filter = { user: userId, status: "archived" };
-  }
 
-  Note.find(filter)
+  Note.find()
     .then((notes) => {
+      let filteredNotes = [];
+      if (keyword) {
+        notes.forEach((note) => {
+          if (
+            note.title.includes(keyword) &&
+            note.user == userId &&
+            note.status === "archived"
+          ) {
+            filteredNotes.push(note);
+          }
+        });
+      } else {
+        filteredNotes = notes.filter(
+          (note) => note.user == userId && note.status === "archived"
+        );
+      }
+      return filteredNotes;
+    })
+    .then((notes) => {
+      const userDetails = req.session.currentUser;
       res.render("notes/note-archive", { userDetails, notes });
     })
     .catch((error) => next(error));

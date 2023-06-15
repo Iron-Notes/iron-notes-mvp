@@ -34,4 +34,10 @@ const userSchema = new Schema(
 
 const User = model("User", userSchema);
 
+userSchema.methods.updateProfile = function (username, password) {
+  this.username = username;
+  this.passwordHash = bcryptjs.hashSync(password, saltRounds);
+  return this.save();
+};
+
 module.exports = User;
