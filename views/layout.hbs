@@ -53,10 +53,11 @@
               Log In
               {{/if}}
             </a>
-
+            {{#if userDetails}}
             <button class="btn btn-link nav-link" id="btnSwitch">
               <i class="fas fa-adjust"></i>
             </button>
+             {{/if}}
           </div>
           <form id="form-search" method="get" action="" class="d-flex" role="search">
             <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search"
