@@ -28,7 +28,6 @@ router.get("/auth/signup", (req, res, next) => {
 router.post("/auth/signup", (req, res, next) => {
   const { username, email, password } = req.body;
 
-  // Check that username, email, and password are provided
   if (!username || !email || !password) {
     res.status(400).render("auth/signup", {
       errorMessage:
@@ -37,7 +36,7 @@ router.post("/auth/signup", (req, res, next) => {
 
     return;
   }
-  // make sure passwords are strong:
+
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
     res.status(400).render("auth/signup", {
@@ -47,7 +46,6 @@ router.post("/auth/signup", (req, res, next) => {
     return;
   }
 
-  // Create a new user - start by hashing the password
   bcryptjs
     .genSalt(saltRounds)
     .then((salt) => {
@@ -63,7 +61,7 @@ router.post("/auth/signup", (req, res, next) => {
       return User.create(newUser);
     })
     .then((userFromDB) => {
-      res.redirect("/auth/login"); // user has been created, redirect to /auth/login
+      res.redirect("/auth/login");
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
@@ -103,17 +101,14 @@ router.post("/auth/login", (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        //user doesn't exist (mongoose returns "null")
         res.status(400).render("auth/login", {
           errorMessage: "Email is not registered. Sign up first!",
         });
         return;
       } else if (bcryptjs.compareSync(password, user.passwordHash)) {
-        //login successful
         req.session.currentUser = user;
         res.redirect("/notes/list");
       } else {
-        //login failed
         res
           .status(400)
           .render("auth/login", { errorMessage: "Incorrect credentials." });
@@ -145,6 +140,75 @@ router.get("/auth/user-profile", isLoggedIn, (req, res, next) => {
   const userDetails = req.session.currentUser;
   if (userDetails) {
     res.render("auth/user-profile", { userDetails });
+  } else {
+    res.redirect("/auth/login");
+  }
+});
+
+// GET /auth/user-details
+router.get("/auth/user-details", isLoggedIn, (req, res, next) => {
+  const userDetails = req.session.currentUser;
+
+  if (userDetails) {
+    User.findById(userDetails._id)
+      .then((user) => {
+        if (!user) {
+          res.status(404).send("User not found");
+          return;
+        }
+
+        const updatedUserDetails = {
+          username: user.username,
+          email: user.email,
+        };
+
+        res.json(updatedUserDetails);
+      })
+      .catch((error) => next(error));
+  } else {
+    res.redirect("/auth/login");
+  }
+});
+
+// POST /auth/user-profile
+router.post("/auth/user-profile", isLoggedIn, (req, res, next) => {
+  const userDetails = req.session.currentUser;
+  const { field, value } = req.body;
+
+  if (userDetails) {
+    User.findById(userDetails._id)
+      .then((user) => {
+        if (!user) {
+          res.redirect("/auth/login");
+          return;
+        }
+
+        if (field === "username") {
+          user.username = value;
+        } else if (field === "password") {
+          bcryptjs
+            .genSalt(saltRounds)
+            .then((salt) => {
+              return bcryptjs.hash(value, salt);
+            })
+            .then((hash) => {
+              user.passwordHash = hash;
+              return user.save();
+            })
+            .then(() => {
+              res.redirect("/auth/user-profile");
+            })
+            .catch((error) => next(error));
+          return;
+        }
+        user
+          .save()
+          .then(() => {
+            res.redirect("/auth/user-profile");
+          })
+          .catch((error) => next(error));
+      })
+      .catch((error) => next(error));
   } else {
     res.redirect("/auth/login");
   }
