@@ -9,7 +9,8 @@
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css" />
   <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
 </head>
 
 <body>
@@ -31,8 +32,8 @@
         {{/if}} 
         " aria-current="page" href="/notes/list">My Notes</a>
             <div class="nav-item dropdown">
-              <a hidden class="nav-link dropdown-toggle {{#unless userDetails}}disabled{{/unless}}" data-bs-toggle='dropdown'
-                href="#" role="button" aria-haspopup="true" aria-expanded="false">Labels</a>
+              <a hidden class="nav-link dropdown-toggle {{#unless userDetails}}disabled{{/unless}}"
+                data-bs-toggle='dropdown' href="#" role="button" aria-haspopup="true" aria-expanded="false">Labels</a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Label1</a>
                 <a class="dropdown-item" href="#">Label2</a>
@@ -57,7 +58,7 @@
             <button class="btn btn-link nav-link" id="btnSwitch">
               <i class="fas fa-adjust"></i>
             </button>
-             {{/if}}
+            {{/if}}
           </div>
           <form id="form-search" method="get" action="" class="d-flex" role="search">
             <input class="form-control me-2" name="keyword" type="search" placeholder="Search" aria-label="Search"
