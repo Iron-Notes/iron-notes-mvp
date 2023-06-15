@@ -1,49 +1,117 @@
-<h2>Your Profile</h2>
-<div class="container">
-    <div class="row d-flex jsutify-content-center">
-        <div class="col-md-10 mt-5 pt-5">
-            <div class="row z-depth-3">
-                <div class="col-sm-4 bg-info rounded-left">
-                    <div class="card-block text-center text-white">
-                        <i class="fas fa-7x">
-                            <h2 class="font-weight-bold mt-4">Hello {{userDetails.username}}!</h2>
-                            <i class="far fa-edit fa-2x mb-4"></i>
-                        </i>
-                    </div>
-                </div>
-                <div class="col-sm-8 bg-white rounded-right">
-                    <h3 class="mt-3 text-center">Information</h3>
+
+                <div class="col-sm-8 rounded-right py-5 mx-auto">
+                    <h3 class="mt-3">User Profile</h3>
                     <hr class="badge-primary mt-0 w-25">
                     <div class="row">
                         <div class="col-sm-6">
-                            <p class="font-weight-bold">Email: <a href="" class="fa-regular fa-pen-to-square"></a></p>
+                            <p class="font-weight-bold">Email:</p>
                             <h6 class="text-muted">{{userDetails.email}}</h6>
                         </div>
-                        <div class="col-sm-6">
-                            <p class="font-weight-bold">Password: <a href="" class="fa-regular fa-pen-to-square"></a></p>
-                            <h6 class="text-muted">**********</h6>
-                        </div>
-                    </div>                 
+                        <form action="">
+                    </div>                
                     <div class="row pt-3">
                         <div class="col-sm-6">
-                             <p class="font-weight-bold">Username: <a href="" class="fa-regular fa-pen-to-square"></a></p>
-                            <h6 class="text-muted">{{userDetails.username}}</h6>
+                             <p class="font-weight-bold">Username: <a href="" class="fa-regular fa-pen-to-square username-edit-icon"></a></p>        
+                           <div class="input-group mb-3">
+                            <input class="text-muted form-control" id="username-input" type="text" value={{userDetails.username}} disabled></input>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="updateUserProfile('username', this)" disabled>Save</button>
+                                </div>
+                          </div>
                         </div>
                     </div>
-                    {{!-- <h4 class="mt-3">Projects</h4>
-                    <hr class="bg-primary">
-                    <div class="row">
+                    <div class="row pt-3">
                         <div class="col-sm-6">
-                            <p class="font-weight-bold">Recent</p>
-                            <h6 class="text-muted">School Web</h6>
+                             <p class="font-weight-bold">Password: <a href="" class="fa-regular fa-pen-to-square password-edit-icon"></a></p>        
+                           <div class="input-group mb-3">
+                            <input class="text-muted form-control" id="password-input" type="password" value="**********" disabled></input>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="updateUserProfile('password', this)" disabled>Save</button>
+                                </div>
+                                <div id="password-validation-msg" class="text-danger py-3"></div>
+                          </div>
                         </div>
-                        <div class="col-sm-6">
-                            <p class="font-weight-bold">Most viewed:</p>
-                            <h6 class="text-muted">Dinoter</h6>
-                        </div> --}}
+                    </div>
+                    </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.username-edit-icon').click(function(event) {
+      event.preventDefault();
+    var inputField = $(this).closest('.col-sm-6').find('input');
+     var saveButton = $(this).closest('.col-sm-6').find('button');
+     saveButton.removeAttr('disabled');
+     inputField.removeAttr('disabled');
+      inputField.removeClass('text-muted').addClass('text-primary');
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('.password-edit-icon').click(function(event) {
+      event.preventDefault();
+    var inputField = $(this).closest('.col-sm-6').find('input');
+     var saveButton = $(this).closest('.col-sm-6').find('button');
+     saveButton.removeAttr('disabled');
+     inputField.removeAttr('disabled');
+      inputField.removeClass('text-muted').addClass('text-primary');
+    });
+  });
+</script>
+
+<script>
+function updateUserProfile(field, button) {
+  var inputField = $('#' + field + '-input');
+  var value = inputField.val();
+
+  if (field === 'password') {
+    const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+    if (!regex.test(value)) {
+      $('#password-validation-msg').text('Password needs to have at least 6 characters and must contain at least one number, one lowercase, and one uppercase letter.');
+      return;
+    } else {
+      $('#password-validation-msg').text('');
+    }
+  }
+
+  $.ajax({
+    url: '/auth/user-profile',
+    type: 'POST',
+    data: {
+      field: field,
+      value: value
+    },
+    success: function(response) {
+      inputField.prop('disabled', true);
+      $(button).prop('disabled', true).addClass('disabled');
+    },
+    error: function(error) {
+    }
+  });
+}
+
+
+</script>
+
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: '/auth/user-details',
+      type: 'GET',
+      success: function(userDetails) {
+        $('#username-input').val(userDetails.username);
+      },
+      error: function(error) {
+      }
+    });
+  });
+</script>
