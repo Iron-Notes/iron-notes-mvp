@@ -8,14 +8,14 @@ const fileUploader = require("../config/cloudinary.config");
 router.get("/notes/list", isLoggedIn, (req, res, next) => {
   const userId = req.session.currentUser._id;
   let keyword = req.query.keyword;
-
   Note.find()
     .then((notes) => {
       let filteredNotes = [];
       if (keyword) {
+        keyword = keyword.toLowerCase()
         notes.forEach((note) => {
           if (
-            note.title.includes(keyword) &&
+            note.title.toLowerCase().includes(keyword) &&
             note.user == userId &&
             note.status === "active"
           ) {
@@ -45,9 +45,10 @@ router.get("/notes/trash", isLoggedIn, (req, res, next) => {
     .then((notes) => {
       let filteredNotes = [];
       if (keyword) {
+        keyword = keyword.toLowerCase()
         notes.forEach((note) => {
           if (
-            note.title.includes(keyword) &&
+            note.title.toLowerCase().includes(keyword) &&
             note.user == userId &&
             note.status === "deleted"
           ) {
@@ -77,9 +78,10 @@ router.get("/notes/archive", isLoggedIn, (req, res, next) => {
     .then((notes) => {
       let filteredNotes = [];
       if (keyword) {
+        keyword = keyword.toLowerCase()
         notes.forEach((note) => {
           if (
-            note.title.includes(keyword) &&
+            note.title.toLowerCase().includes(keyword) &&
             note.user == userId &&
             note.status === "archived"
           ) {
