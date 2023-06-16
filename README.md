@@ -45,6 +45,15 @@ It is also responsive and optimized for mobile screens.
 - MongoDB
 - Cloudinary (for image uploads)
 
+## Instructions
+
+- Install dependencies: npm install
+- Enviroment variables: you need to add a .env file. Inside this file you have to  add 5 variables.
+  - PORT a valid port number you can use to connect locally ex. PORT=3000
+  - SESSION_SECRET is a string used to compute the hash, ex. SESSION_SECRET=whateveryoulike
+  - CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET. You have to create an account on https://cloudinary.com/ and follow the instructions inside.
+- Finally you can run the app with: npm run dev
+
 ## Code Structure
 
 The main logic of the app can be found in the `notes.routes.js` file. It contains the following routes:
@@ -63,6 +72,10 @@ The main logic of the app can be found in the `notes.routes.js` file. It contain
 - `/notes/:noteId/edit`: Updates the note details with the provided information, including optional image upload.
 
 The routes utilize various middleware functions for user authentication and file uploading.
+
+## Demo
+
+This is the link to the live app: https://iron-notes.adaptable.app/
 
 ## Contributing
 
